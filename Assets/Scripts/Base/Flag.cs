@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class Flag : MonoBehaviour
 {
-    public void SetEnable()
+    public void Enable()
     {
         gameObject.SetActive(true);
     }
 
-    public void SetDisable()
+    public void Disable()
     {
         gameObject.SetActive(false);
     }

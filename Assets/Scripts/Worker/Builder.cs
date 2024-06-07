@@ -1,7 +1,6 @@
 using UnityEngine;
 
-[RequireComponent (typeof(Mover))]
-[RequireComponent (typeof(Worker))]
+[RequireComponent (typeof(Mover), typeof(Worker))]
 public class Builder : MonoBehaviour
 {
     [SerializeField] private Base _prefab;
@@ -17,11 +16,6 @@ public class Builder : MonoBehaviour
         _worker = GetComponent<Worker>();
     }
 
-    private void Start()
-    {
-        _mover = GetComponent<Mover>();
-    }
-
     private void OnEnable()
     {
         _worker.TargetBuilded += SetBuild;
@@ -32,10 +26,9 @@ public class Builder : MonoBehaviour
         _worker.TargetBuilded -= SetBuild;
     }
 
-    private void SetBuild(Transform target)
+    private void Start()
     {
-        _isBuild = true;
-        _target = target;
+        _mover = GetComponent<Mover>();
     }
 
     private void Update()
@@ -44,6 +37,12 @@ public class Builder : MonoBehaviour
             return;
 
         Build();
+    }
+
+    private void SetBuild(Transform target)
+    {
+        _isBuild = true;
+        _target = target;
     }
 
     private void Build()

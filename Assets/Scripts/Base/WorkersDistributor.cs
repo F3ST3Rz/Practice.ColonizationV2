@@ -1,23 +1,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Base))]
-[RequireComponent(typeof(Scanner))]
-[RequireComponent(typeof(Storager))]
+[RequireComponent(typeof(Adder), typeof(Base), typeof(Scanner))]
 public class WorkersController : MonoBehaviour
 {
     [SerializeField] private Worker _prefab;
 
     private Scanner _scanner;
     private Base _base;
-    private Storager _storager;
+    private Adder _adder;
     private List<Worker> _workers;
     private int _workersCount;
     private bool _isBuild = false;
 
     private void Awake()
     {
-        _storager = GetComponent<Storager>();
+        _adder = GetComponent<Adder>();
+    }
+
+    private void OnEnable()
+    {
+        _adder.WorkerAdded += AddWorker;
+        _adder.BaseAdded += SetBuild;
+    }
+
+    private void OnDisable()
+    {
+        _adder.WorkerAdded -= AddWorker;
+        _adder.BaseAdded -= SetBuild;
     }
 
     private void Start()
@@ -29,37 +39,9 @@ public class WorkersController : MonoBehaviour
 
         for (int i = 0; i < _workersCount; i++)
         {
-            if (transform.GetChild(i).GetComponent<Worker>())
-                _workers.Add(transform.GetChild(i).GetComponent<Worker>());
+            if (transform.GetChild(i).TryGetComponent(out Worker worker))
+                _workers.Add(worker);
         }
-    }
-
-    private void OnEnable()
-    {
-        _storager.WorkerAdded += AddWorker;
-        _storager.BaseAdded += SetBuild;
-    }
-
-    private void OnDisable()
-    {
-        _storager.WorkerAdded -= AddWorker;
-        _storager.BaseAdded -= SetBuild;
-    }
-
-    private Worker GetFreeWorker()
-    {
-        foreach (Worker worker in _workers)
-        {
-            if (worker.IsWork == false && worker.IsBuild == false)
-                return worker;
-        }
-
-        return null;
-    }
-
-    private void SetBuild()
-    {
-        _isBuild = true;
     }
 
     private void Update()
@@ -82,6 +64,22 @@ public class WorkersController : MonoBehaviour
         }
 
         worker.GetTarget(transformObjectScan);
+    }
+
+    private Worker GetFreeWorker()
+    {
+        foreach (Worker worker in _workers)
+        {
+            if (worker.IsWork == false && worker.IsBuild == false)
+                return worker;
+        }
+
+        return null;
+    }
+
+    private void SetBuild()
+    {
+        _isBuild = true;
     }
 
     private void AddWorker()

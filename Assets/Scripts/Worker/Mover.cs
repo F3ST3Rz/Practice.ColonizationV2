@@ -1,8 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Worker))]
-[RequireComponent(typeof(Getter))]
+[RequireComponent(typeof(Animator), typeof(Worker), typeof(Getter))]
 public class Mover : MonoBehaviour
 {
     private const string Walk = nameof(Walk);
@@ -21,13 +19,6 @@ public class Mover : MonoBehaviour
         _worker = GetComponent<Worker>();
     }
 
-    private void Start()
-    {
-        _animator = GetComponent<Animator>();
-        _getter = GetComponent<Getter>();
-        _baseTransform = transform.parent.GetComponent<Transform>();
-    }
-
     private void OnEnable()
     {
         _worker.TargetReceived += SetTarget;
@@ -36,6 +27,21 @@ public class Mover : MonoBehaviour
     private void OnDisable()
     {
         _worker.TargetReceived -= SetTarget;
+    }
+
+    private void Start()
+    {
+        _animator = GetComponent<Animator>();
+        _getter = GetComponent<Getter>();
+        _baseTransform = transform.parent.GetComponent<Transform>();
+    }
+
+    private void Update()
+    {
+        if (_worker.IsWork == false)
+            return;
+
+        Move();
     }
 
     private void Move()
@@ -71,14 +77,6 @@ public class Mover : MonoBehaviour
     private void SetTarget(Transform target)
     {
         _targetTransform = target;
-    }
-
-    private void Update()
-    {
-        if (_worker.IsWork == false)
-            return;
-
-        Move();
     }
 
     public void SetTransformBase(Transform transformTarget)

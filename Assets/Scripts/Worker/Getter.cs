@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
 
-[RequireComponent (typeof(Worker))]
+[RequireComponent(typeof(Worker))]
 public class Getter : MonoBehaviour
 {
     [SerializeField] private float _pickDistance;
@@ -10,14 +9,14 @@ public class Getter : MonoBehaviour
     [SerializeField] private Transform _pointRay;
 
     private Worker _worker;
- 
+
     private PickingObject _pickingObject;
 
     public PickingObject PickingObject => _pickingObject;
 
     private void Start()
     {
-        _worker = GetComponent<Worker> ();
+        _worker = GetComponent<Worker>();
     }
 
     private void Update()
@@ -55,7 +54,8 @@ public class Getter : MonoBehaviour
         if (hitInfo.transform.TryGetComponent(out Storager storager) == false)
             return;
 
-        storager.PutUp(_worker, _pickingObject.GetComponent<Box>());
+        if(_pickingObject.TryGetComponent(out Box box))
+            storager.PutUp(_worker, box);
     }
 
     public void Reset()

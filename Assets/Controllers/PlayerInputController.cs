@@ -25,14 +25,6 @@ public class PlayerInputController : MonoBehaviour
         _PlayerInput.Player.LeftMouseButton.performed += OnLeftMouseButtonPressed;
     }
 
-    private void Start()
-    {
-        _maxXBorder = _terrain.terrainData.size.x - _offsetBorder;
-        _maxZBorder = _terrain.terrainData.size.z - _offsetBorder;
-        _minXBorder += _offsetBorder;
-        _minZBorder += _offsetBorder;
-    }
-
     private void OnEnable()
     {
         _PlayerInput.Enable();
@@ -41,6 +33,14 @@ public class PlayerInputController : MonoBehaviour
     private void OnDisable()
     {
         _PlayerInput.Disable();
+    }
+
+    private void Start()
+    {
+        _maxXBorder = _terrain.terrainData.size.x - _offsetBorder;
+        _maxZBorder = _terrain.terrainData.size.z - _offsetBorder;
+        _minXBorder += _offsetBorder;
+        _minZBorder += _offsetBorder;
     }
 
     private void Update()

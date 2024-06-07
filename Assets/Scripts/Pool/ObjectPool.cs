@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-
     [SerializeField] private Transform _container;
     [SerializeField] private Box _prefab;
 
     private Queue<Box> _pool;
 
     public IEnumerable<Box> PooledObjects => _pool;
+    public Transform TransformContainer => _container;
 
     private void Awake()
     {
@@ -34,10 +34,5 @@ public class ObjectPool : MonoBehaviour
         _pool.Enqueue(box);
         box.gameObject.SetActive(false);
         box.transform.parent = _container;
-    }
-
-    public Transform GetTransformContainer()
-    {
-        return _container;
     }
 }

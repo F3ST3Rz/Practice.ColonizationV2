@@ -1,12 +1,12 @@
 using UnityEngine;
 using System;
 
-[RequireComponent(typeof(Storager))]
+[RequireComponent(typeof(Adder))]
 public class Base : MonoBehaviour
 {
     [SerializeField] private Flag _flag;
 
-    private Storager _storager;
+    private Adder _adder;
     private bool _isBuild = false;
 
     public event Action BuildedBase;
@@ -14,17 +14,17 @@ public class Base : MonoBehaviour
 
     private void Awake()
     {
-        _storager = GetComponent<Storager>();
+        _adder = GetComponent<Adder>();
     }
 
     private void OnEnable()
     {
-        _storager.BaseAdded += SetBuild;
+        _adder.BaseAdded += SetBuild;
     }
 
     private void OnDisable()
     {
-        _storager.BaseAdded -= SetBuild;
+        _adder.BaseAdded -= SetBuild;
     }
 
     private void SetBuild()
@@ -62,7 +62,7 @@ public class Base : MonoBehaviour
 
             if (_flag.isActiveAndEnabled == false)
             {
-                _flag.SetEnable();
+                _flag.Enable();
                 BuildedBase?.Invoke();
             }
         }
@@ -71,6 +71,6 @@ public class Base : MonoBehaviour
     public void Reset()
     {
         _isBuild = false;
-        _flag.SetDisable();
+        _flag.Disable();
     }
 }

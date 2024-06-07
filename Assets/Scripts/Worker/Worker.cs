@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Getter))]
-[RequireComponent(typeof(Mover))]
+[RequireComponent(typeof(Getter), typeof(Mover))]
 public class Worker : MonoBehaviour
 {
     private Getter _getter;
